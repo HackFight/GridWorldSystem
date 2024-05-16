@@ -12,38 +12,14 @@ def Conway(grid, grid_width, grid_height):
             #Count the number of alive neighbors (In the most professional way ever)
             alive_neighbors = 0
 
-            try:
-                if oldGen[x-1][y+1] == 1: alive_neighbors += 1
-            except:
-                pass
-            try:
-                if oldGen[x][y+1] == 1: alive_neighbors += 1
-            except:
-                pass
-            try:
-                if oldGen[x+1][y+1] == 1: alive_neighbors += 1
-            except:
-                pass
-            try:
-                if oldGen[x+1][y] == 1: alive_neighbors += 1
-            except:
-                pass
-            try:
-                if oldGen[x+1][y-1] == 1: alive_neighbors += 1
-            except:
-                pass
-            try:
-                if oldGen[x][y-1] == 1: alive_neighbors += 1
-            except:
-                pass
-            try:
-                if oldGen[x-1][y-1] == 1: alive_neighbors += 1
-            except:
-                pass
-            try:
-                if oldGen[x-1][y] == 1: alive_neighbors += 1
-            except:
-                pass
+            if x > 0 and y < grid_height - 1 and oldGen[x-1][y+1] == 1: alive_neighbors += 1
+            if y < grid_height - 1 and oldGen[x][y+1] == 1: alive_neighbors += 1
+            if x < grid_width - 1 and y < grid_height - 1 and oldGen[x+1][y+1] == 1: alive_neighbors += 1
+            if x < grid_width - 1 and oldGen[x+1][y] == 1: alive_neighbors += 1
+            if x < grid_width - 1 and y > 0 and oldGen[x+1][y-1] == 1: alive_neighbors += 1
+            if y > 0 and oldGen[x][y-1] == 1: alive_neighbors += 1
+            if x > 0 and y > 0 and oldGen[x-1][y-1] == 1: alive_neighbors += 1
+            if x > 0 and oldGen[x-1][y] == 1: alive_neighbors += 1
             
             #Apply Conway's Game of Life rules (With again, amazing coding skills)
 
