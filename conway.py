@@ -23,10 +23,13 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Conway's Game of Life")
 font = pygame.font.SysFont("Classic Console Neue", 16)
 
-#Texts init
-pause_text = font.render("Space bar - pause", True, purple)
-speed_text = font.render("Mousewheel - speed", True, purple)
-draw_text = font.render("LMB - draw", True, purple)
+#UI texts init
+UI_texts = []
+UI_texts.append(font.render("Space bar - pause", True, purple))
+UI_texts.append(font.render("Mousewheel - speed", True, purple))
+UI_texts.append(font.render("LMB - draw", True, purple))
+UI_texts.append(font.render("S - screenshot", True, purple))
+UI_texts.append(font.render("C - clear", True, purple))
 
 def WriteGrid(grid):
 
@@ -36,7 +39,7 @@ def WriteGrid(grid):
         
         print("")
 
-def UpdateScreen(_grid):
+def UpdateScreen(_grid, dynamic_UI):
 
     # Clear screen
     renderer.ClearScreen(screen)
@@ -45,9 +48,17 @@ def UpdateScreen(_grid):
     renderer.DrawGrid(_grid, GRID_WIDTH, GRID_HEIGHT, screen, SCREEN_WIDTH, SCREEN_HEIGHT)
 
     # Render UI
-    screen.blit(pause_text, (10, 10 + speed_text.get_height() * 0))
-    screen.blit(speed_text, (10, 10 + speed_text.get_height() * 1))
-    screen.blit(draw_text, (10, 10 + speed_text.get_height() * 2))
+    #Left
+    i= 0
+    for text in UI_texts:
+        screen.blit(text, (10, 10 + text.get_height() * i))
+        i += 1
+
+    #Right
+    j = 0
+    for text in dynamic_UI:
+        screen.blit(text, (SCREEN_WIDTH - 10 - text.get_width(), 10 + text.get_height() * j))
+        j += 1
 
     # Update screen
     pygame.display.flip()
@@ -105,6 +116,11 @@ def main():
 
                     # Put UI back
                     UpdateScreen(grid)
+                
+                # Clear grid if C key pressed
+                if event.key == pygame.K_c:
+                    grid = grid_system.GridInit(GRID_WIDTH, GRID_HEIGHT)
+                    UpdateScreen(grid)
 
             # Change simulation speed with mousewheel
             if event.type == pygame.MOUSEWHEEL:
@@ -133,14 +149,33 @@ def main():
         
         # Dynamic variables
         simulation_speed = MIN_SPEED - (scroll / 10)
+
+        # Dynamic texts
+        dynamic_texts = []
+
+        # Speed stat
+        try:
+            steps_per_second = 1/simulation_speed
+            actual_speed_text = font.render("Speed: " + str(int(steps_per_second)) + " steps/second", True, purple)
+        except:
+            actual_speed_text = font.render("Speed: MAX", True, purple)
+        dynamic_texts.append(actual_speed_text)
         
+        #Paused
+        if not ticking:
+            paused_text = font.render("Simulation paused", True, purple)
+            dynamic_texts.append(paused_text)
+        
+        UpdateScreen(grid, dynamic_texts)
+        
+        # Simulation ######################################################
         if ticking:
 
             # Next gen
             grid = algorythms.Conway(grid, GRID_WIDTH, GRID_HEIGHT)
 
             # Update screen
-            UpdateScreen(grid)
+            UpdateScreen(grid, dynamic_texts)
 
             time.sleep(simulation_speed)
 

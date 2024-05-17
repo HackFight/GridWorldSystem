@@ -10,9 +10,20 @@ def Switch(grid, x, y):
 
     return newState
 
+def IsGridEmpty(grid, grid_width, grid_height):
+
+    empty = True
+
+    for y in range(grid_height):
+        for x in range(grid_width):
+            if grid[x][y] == 1: empty = False
+            
+    return empty
 
 def main():
-    print("This is a library. It has:\n - GridInit(grid_width, grid_height): Returns a 2D list filled with 0.")
+    print("This is a library. It has:")
+    print(" - GridInit(grid_width, grid_height): Returns a 2D list filled with 0.")
+    print(" - Switch(grid_width, x, y): Retuns the inverted value of the cell.")
 
 
 if __name__ == '__main__':
