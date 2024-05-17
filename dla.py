@@ -65,7 +65,7 @@ def UpdateScreenNoUI(_grid):
 
 def main():
     # Variables init
-    ticking = True
+    ticking = False
     scroll = 0
     clicked = False
 
@@ -73,11 +73,10 @@ def main():
     grid = grid_system.GridInit(GRID_WIDTH,GRID_HEIGHT)
 
     # Cells init
-    grid[1][0] = 1
-    grid[2][1] = 1
-    grid[2][2] = 1
-    grid[1][2] = 1
-    grid[0][2] = 1
+    grid[int(GRID_WIDTH/2)][int(GRID_HEIGHT/2)] = 1
+
+    # First frame render
+    UpdateScreen(grid)
 
     # Main loop
     running = True
@@ -101,7 +100,7 @@ def main():
                     UpdateScreenNoUI(grid)
 
                     # Take a screenshot
-                    renderer.Screenshot(screen, "Conways-" + str(GRID_WIDTH) + "x" + str(GRID_HEIGHT))
+                    renderer.Screenshot(screen, "DLA" + str(GRID_WIDTH) + "x" + str(GRID_HEIGHT))
 
                     # Put UI back
                     UpdateScreen(grid)
@@ -134,12 +133,12 @@ def main():
         # Dynamic variables
         simulation_speed = MIN_SPEED - (scroll / 10)
         
+        # Simulation ######################################################
         if ticking:
 
-            # Next gen
-            grid = algorythms.Conway(grid, GRID_WIDTH, GRID_HEIGHT)
+            grid = algorythms.DLA(grid, GRID_WIDTH, GRID_HEIGHT)
 
-            # Update screen
+            # Render simulation
             UpdateScreen(grid)
 
             time.sleep(simulation_speed)
