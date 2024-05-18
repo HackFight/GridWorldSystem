@@ -102,6 +102,9 @@ def DLA(grid, grid_width, grid_height):
 
     return newGrid
 
+def FallingSand(grid, grid_width, grid_height):
+    oldGrid = deepcopy(grid)
+    newGrid = deepcopy(grid)
 
 def main():
     print("This is a library. It has:")
